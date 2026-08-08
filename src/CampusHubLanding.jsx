@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
@@ -165,13 +166,13 @@ function Navbar() {
           </a>
         </div>
         <div className="flex items-center gap-3">
-          <button className="hidden items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold text-[#0B1D3A] transition hover:bg-[#0B1D3A]/5 sm:flex">
-            <LogIn className="h-4 w-4" />
-            Login
-          </button>
-          <button className="rounded-lg bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition hover:bg-[#1E4FCC]">
-            Get Started
-          </button>
+          <Link to="/login" className="hidden items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold text-[#0B1D3A] transition hover:bg-[#0B1D3A]/5 sm:flex">
+  <LogIn className="h-4 w-4" />
+  Login
+</Link>
+<button className="rounded-lg bg-[#2563EB] px-4 py-2 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition hover:bg-[#1E4FCC]">
+  Get Started
+</button>
         </div>
       </div>
     </header>
@@ -206,14 +207,14 @@ function Hero() {
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
-            <button className="group flex items-center gap-2 rounded-xl bg-[#2563EB] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:-translate-y-0.5 hover:bg-[#1E4FCC]">
-              Get Started
-              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-            </button>
-            <button className="flex items-center gap-2 rounded-xl border border-[#0B1D3A]/15 bg-white/70 px-6 py-3.5 text-sm font-semibold text-[#0B1D3A] backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-[#2563EB]/40">
-              <LogIn className="h-4 w-4" />
-              Login
-            </button>
+           <button className="group flex items-center gap-2 rounded-xl bg-[#2563EB] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:-translate-y-0.5 hover:bg-[#1E4FCC]">
+  Get Started
+  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+</button>
+<Link to="/login" className="flex items-center gap-2 rounded-xl border border-[#0B1D3A]/15 bg-white/70 px-6 py-3.5 text-sm font-semibold text-[#0B1D3A] backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-[#2563EB]/40">
+  <LogIn className="h-4 w-4" />
+  Login
+</Link>
           </div>
         </motion.div>
 
