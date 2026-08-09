@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Mail,
@@ -22,6 +23,7 @@ const ROLES = [
 ];
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [role, setRole] = useState("student");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,8 +56,7 @@ export default function LoginPage() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 2000);
+      navigate("/dashboard");
     }, 1600);
   };
 
