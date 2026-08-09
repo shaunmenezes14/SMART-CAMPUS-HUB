@@ -56,7 +56,7 @@ export default function LoginPage() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      navigate("/dashboard");
+      navigate(role === "faculty" ? "/faculty-dashboard" : "/dashboard", { state: { role } });
     }, 1600);
   };
 
