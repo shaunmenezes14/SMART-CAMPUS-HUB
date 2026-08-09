@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
 import {
+  User,
   Mail,
   Lock,
   Eye,
   EyeOff,
   Loader2,
   GraduationCap,
-  User,
   Users,
   ShieldCheck,
   ArrowRight,
@@ -22,19 +22,23 @@ const ROLES = [
   { key: "admin", label: "Admin", icon: ShieldCheck },
 ];
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const navigate = useNavigate();
+
   const [role, setRole] = useState("student");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
 
   const validate = () => {
     const next = {};
+    if (!name.trim()) {
+      next.name = "Full name is required.";
+    }
     if (!email.trim()) {
       next.email = "College email is required.";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -44,6 +48,11 @@ export default function LoginPage() {
       next.password = "Password is required.";
     } else if (password.length < 6) {
       next.password = "Password must be at least 6 characters.";
+    }
+    if (!confirmPassword) {
+      next.confirmPassword = "Please confirm your password.";
+    } else if (confirmPassword !== password) {
+      next.confirmPassword = "Passwords do not match.";
     }
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -56,14 +65,7 @@ export default function LoginPage() {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-     navigate(
-        role === "faculty"
-          ? "/faculty-dashboard"
-          : role === "admin"
-          ? "/admin-dashboard"
-          : "/dashboard",
-        { state: { role } }
-      );
+      navigate("/login");
     }, 1600);
   };
 
@@ -118,10 +120,11 @@ export default function LoginPage() {
           className="relative z-10 text-white"
         >
           <h1 className="font-display text-3xl font-bold leading-tight">
-            Welcome back to your campus, online.
+            Join your campus, digitally.
           </h1>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/70">
-            Sign in to check your timetable, notices, and faculty consultations all from one dashboard.
+            Create your account to access timetables, faculty consultations,
+            notices, and more - all in one place.
           </p>
         </motion.div>
       </div>
@@ -143,10 +146,10 @@ export default function LoginPage() {
           </div>
 
           <h2 className="font-display text-2xl font-bold text-[#0B1D3A]">
-            Sign in to your account
+            Create your account
           </h2>
           <p className="mt-1.5 text-sm text-[#5B6B8C]">
-            Choose your role and enter your details.
+            Choose your role and fill in your details.
           </p>
 
           <div className="mt-6 grid grid-cols-3 gap-2">
@@ -171,6 +174,36 @@ export default function LoginPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="mt-6 space-y-4" noValidate>
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-[#0B1D3A]">
+                Full Name
+              </label>
+              <div className="relative">
+                <User className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5B6B8C]" />
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Your full name"
+                  className={`w-full rounded-xl border bg-white/80 py-3 pl-10 pr-4 text-sm text-[#0B1D3A] outline-none transition placeholder:text-[#5B6B8C]/60 focus:ring-2 focus:ring-[#2563EB]/30 ${
+                    errors.name ? "border-red-400" : "border-[#0B1D3A]/10 focus:border-[#2563EB]"
+                  }`}
+                />
+              </div>
+              <AnimatePresence>
+                {errors.name && (
+                  <motion.p
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-1.5 text-xs font-medium text-red-500"
+                  >
+                    {errors.name}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </div>
+
             <div>
               <label className="mb-1.5 block text-sm font-medium text-[#0B1D3A]">
                 College Email
@@ -243,19 +276,34 @@ export default function LoginPage() {
               </AnimatePresence>
             </div>
 
-            <div className="flex items-center justify-between pt-1 text-sm">
-              <label className="flex items-center gap-2 text-[#5B6B8C]">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 rounded border-[#0B1D3A]/20 text-[#2563EB] focus:ring-[#2563EB]/30"
-                />
-                Remember me
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-[#0B1D3A]">
+                Confirm Password
               </label>
-              <a href="#" className="font-medium text-[#2563EB] hover:underline">
-                Forgot password?
-              </a>
+              <div className="relative">
+                <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5B6B8C]" />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="********"
+                  className={`w-full rounded-xl border bg-white/80 py-3 pl-10 pr-4 text-sm text-[#0B1D3A] outline-none transition placeholder:text-[#5B6B8C]/60 focus:ring-2 focus:ring-[#2563EB]/30 ${
+                    errors.confirmPassword ? "border-red-400" : "border-[#0B1D3A]/10 focus:border-[#2563EB]"
+                  }`}
+                />
+              </div>
+              <AnimatePresence>
+                {errors.confirmPassword && (
+                  <motion.p
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="mt-1.5 text-xs font-medium text-red-500"
+                  >
+                    {errors.confirmPassword}
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </div>
 
             <button
@@ -273,16 +321,7 @@ export default function LoginPage() {
                     className="flex items-center gap-2"
                   >
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Signing in...
-                  </motion.span>
-                ) : success ? (
-                  <motion.span
-                    key="success"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                  >
-                    Signed in
+                    Creating account...
                   </motion.span>
                 ) : (
                   <motion.span
@@ -292,34 +331,18 @@ export default function LoginPage() {
                     exit={{ opacity: 0 }}
                     className="flex items-center gap-2"
                   >
-                    Login as {ROLES.find((r) => r.key === role)?.label}
+                    Register as {ROLES.find((r) => r.key === role)?.label}
                     <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
                   </motion.span>
                 )}
               </AnimatePresence>
             </button>
-
-            <div className="flex items-center gap-3 pt-1">
-              <div className="h-px flex-1 bg-[#0B1D3A]/10" />
-              <span className="text-xs font-medium text-[#5B6B8C]">or</span>
-              <div className="h-px flex-1 bg-[#0B1D3A]/10" />
-            </div>
-
-            <button
-              type="button"
-              className="flex w-full items-center justify-center gap-2.5 rounded-xl border border-[#0B1D3A]/10 bg-white py-3.5 text-sm font-semibold text-[#0B1D3A] transition hover:-translate-y-0.5 hover:border-[#2563EB]/30"
-            >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-br from-[#4285F4] via-[#EA4335] to-[#34A853] text-[10px] font-bold text-white">
-                G
-              </span>
-              Login with Google
-            </button>
           </form>
 
           <p className="mt-6 text-center text-sm text-[#5B6B8C]">
-            New here?{" "}
-            <Link to="/register" className="font-semibold text-[#2563EB] hover:underline">
-              Create an account
+            Already have an account?{" "}
+            <Link to="/login" className="font-semibold text-[#2563EB] hover:underline">
+              Log in
             </Link>
           </p>
         </motion.div>
